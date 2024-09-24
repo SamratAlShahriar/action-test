@@ -62,11 +62,12 @@ jobs:
 
       # iOS build step
       - name: Build iOS IPA
-        run: flutter build ipa --release --no-codesign
+        run: flutter build ipa --release --no-codesign --output-dir=build/ios/ipa -v  # Verbose output
 
       # Upload IPA as build artifact
       - name: Upload iOS IPA
         uses: actions/upload-artifact@v4  # Updated to v4
         with:
           name: ios-ipa
-          path: build/ios/ipa/*.ipa
+          path: build/ios/ipa/*.ipa  # Ensure the path is correct
+          if-no-files-found: warn
