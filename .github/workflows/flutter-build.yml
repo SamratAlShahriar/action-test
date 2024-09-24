@@ -9,14 +9,10 @@ on:
       - master  # or any other branch you want to build on PR
 
 jobs:
-  build:
-    name: Build Flutter project
-    runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
-
-
-    strategy:
-      matrix:
-        platform: [android, ios]
+  # Android build job
+  android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
 
     steps:
       # Checkout the repository
@@ -35,24 +31,41 @@ jobs:
 
       # Android build step
       - name: Build Android APK
-        if: matrix.platform == 'android'
         run: flutter build apk --release
 
-      # iOS build step
-      - name: Build iOS IPA
-        if: matrix.platform == 'ios'
-        run: flutter build ipa --release --no-codesign
-
-      # (Optional) Save APK or IPA as build artifacts
+      # (Optional) Save APK as build artifact
       - name: Upload Android APK
-        if: matrix.platform == 'android'
         uses: actions/upload-artifact@v3
         with:
           name: android-apk
           path: build/app/outputs/flutter-apk/app-release.apk
 
+  # iOS build job
+  ios:
+    name: Build iOS IPA
+    runs-on: macos-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Flutter SDK
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.1'  # Specify the exact stable version here
+
+      # Run Flutter pub get to fetch dependencies
+      - name: Install dependencies
+        run: flutter pub get
+
+      # iOS build step
+      - name: Build iOS IPA
+        run: flutter build ipa --release --no-codesign
+
+      # (Optional) Save IPA as build artifact
       - name: Upload iOS IPA
-        if: matrix.platform == 'ios'
         uses: actions/upload-artifact@v3
         with:
           name: ios-ipa
