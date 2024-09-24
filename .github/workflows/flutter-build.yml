@@ -62,7 +62,7 @@ jobs:
 
       # iOS build step
       - name: Build iOS IPA
-        run: flutter build ipa --release --no-codesign --output-dir=build/ios/ipa -v  # Verbose output
+        run: flutter build ipa --release --no-codesign -v  # Verbose output
 
       # Upload IPA as build artifact
       - name: Upload iOS IPA
