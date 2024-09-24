@@ -11,7 +11,8 @@ on:
 jobs:
   build:
     name: Build Flutter project
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.platform == 'ios' && 'macos-latest' || 'ubuntu-latest' }}
+
 
     strategy:
       matrix:
@@ -40,7 +41,7 @@ jobs:
       # iOS build step
       - name: Build iOS IPA
         if: matrix.platform == 'ios'
-        run: flutter build ios --release --no-codesign
+        run: flutter build ipa --release --no-codesign
 
       # (Optional) Save APK or IPA as build artifacts
       - name: Upload Android APK
