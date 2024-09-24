@@ -3,10 +3,10 @@ name: Flutter Build
 on:
 push:
 branches:
-- main  # or any other branch you want to build on push
+- master  # or any other branch you want to build on push
 pull_request:
 branches:
-- main  # or any other branch you want to build on PR
+- master  # or any other branch you want to build on PR
 
 jobs:
 build:
